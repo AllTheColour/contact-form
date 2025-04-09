@@ -251,58 +251,74 @@
     </div>
 
     <!-- Scripts -->
-    <script>
-        // Open the modal
-        document.getElementById('privacyPolicyLink').addEventListener('click', function () {
-            document.getElementById('privacyPolicyModal').style.display = 'flex';
-        });
+<script>
+  // Open the modal
+  document.getElementById('privacyPolicyLink').addEventListener('click', function () {
+    document.getElementById('privacyPolicyModal').style.display = 'flex';
+    adjustIframeHeight();
+  });
 
-        // Close the modal
-        function closeModal() {
-            document.getElementById('privacyPolicyModal').style.display = 'none';
-        }
+  // Close the modal
+  function closeModal() {
+    document.getElementById('privacyPolicyModal').style.display = 'none';
+    adjustIframeHeight();
+  }
 
-        // Handle form submission
-        function handleFormSubmit(event) {
-            event.preventDefault();
+  // Handle form submission
+  function handleFormSubmit(event) {
+    event.preventDefault();
 
-            const formData = new FormData(event.target);
-            const data = Object.fromEntries(formData.entries());
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
 
-            console.log("Form data submitted:", data);
+    console.log("Form data submitted:", data);
 
-            const isSuccess = true;
+    const isSuccess = true;
 
-            if (isSuccess) {
-                document.getElementById("thankYouMessage").style.display = "block";
-                document.getElementById("errorMessage").style.display = "none";
-                adjustIframeHeight();
-            } else {
-                document.getElementById("thankYouMessage").style.display = "none";
-                document.getElementById("errorMessage").style.display = "block";
-                adjustIframeHeight();
-            }
-        }
+    if (isSuccess) {
+      document.getElementById("thankYouMessage").style.display = "block";
+      document.getElementById("errorMessage").style.display = "none";
+    } else {
+      document.getElementById("thankYouMessage").style.display = "none";
+      document.getElementById("errorMessage").style.display = "block";
+    }
 
-        // Adjust iframe height dynamically
-        function adjustIframeHeight() {
-            const wrapper = document.querySelector('.wrapper');
-            const iframeHeight = wrapper.scrollHeight;
-            window.parent.postMessage({ iframeHeight }, '*');
-        }
+    adjustIframeHeight();
+  }
 
-        // Set focus to the first name field on page load
-        window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('firstName').focus();
-        });
+  // Adjust iframe height dynamically
+  function adjustIframeHeight() {
+    const wrapper = document.querySelector('.wrapper');
+    if (!wrapper) return;
+    const iframeHeight = wrapper.scrollHeight;
+    window.parent.postMessage({ iframeHeight }, '*');
+  }
 
-        // Cycle focus back to the first field after the submit button
-        document.getElementById('submitButton').addEventListener('keydown', (event) => {
-            if (event.key === 'Tab' && !event.shiftKey) {
-                event.preventDefault();
-                document.getElementById('firstName').focus();
-            }
-        });
-    </script>
+  // Set focus to the first name field on page load
+  window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('firstName').focus();
+    adjustIframeHeight();
+  });
+
+  // Recalculate height when window resizes
+  window.addEventListener('resize', adjustIframeHeight);
+
+  // Observe DOM changes that may affect height
+  const observer = new MutationObserver(adjustIframeHeight);
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: true
+  });
+
+  // Cycle focus back to the first field after the submit button
+  document.getElementById('submitButton').addEventListener('keydown', (event) => {
+    if (event.key === 'Tab' && !event.shiftKey) {
+      event.preventDefault();
+      document.getElementById('firstName').focus();
+    }
+  });
+</script>
+
 </body>
 </html>
