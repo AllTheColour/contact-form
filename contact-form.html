@@ -274,7 +274,8 @@
     console.log("Submitting to Wix CMS:", data);
 
     try {
-      const response = await fetch('https://suzielaw.wixstudio.io/_web_modules/submitForm/submitForm', {
+      const response = await fetch('https://aquamarine-longma-82c068.netlify.app/.netlify/functions/submit', {
+      //const response = await fetch('https://suzielaw.wixstudio.io/_web_modules/submitForm/submitForm', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
